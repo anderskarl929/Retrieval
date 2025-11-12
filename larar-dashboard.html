@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lärar Dashboard - Retrieval Övningar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #555;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .info-box {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #155724;
+        }
+
+        .step {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Lärar Dashboard</h1>
+
+        <div class="section">
+            <h2>Snabbstart</h2>
+            <div class="warning-box">
+                <strong>⚠️ Viktigt!</strong> För att spara elevresultat behöver du konfigurera Google Sheets först.
+                Följ instruktionerna nedan.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Steg-för-steg Installation</h2>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Skapa ett nytt Google Sheets-kalkylblad</strong>
+                <ul>
+                    <li>Gå till <a href="https://sheets.google.com" target="_blank">Google Sheets</a></li>
+                    <li>Klicka på "+ Blank" för att skapa ett nytt kalkylblad</li>
+                    <li>Döp det till något lämpligt, t.ex. "Elevresultat Historia 2024"</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Öppna Apps Script Editor</strong>
+                <ul>
+                    <li>I ditt Google Sheets, klicka på <span class="highlight">Extensions</span> → <span class="highlight">Apps Script</span></li>
+                    <li>En ny flik öppnas med Apps Script-editorn</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Klistra in script-koden</strong>
+                <ul>
+                    <li>Ta bort all befintlig kod i editorn</li>
+                    <li>Öppna filen <code>google-apps-script.js</code> från projektet</li>
+                    <li>Kopiera hela innehållet och klistra in det i Apps Script-editorn</li>
+                    <li>Klicka på "Spara" (💾 ikonen)</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Deploya som Web App</strong>
+                <ul>
+                    <li>Klicka på <span class="highlight">Deploy</span> → <span class="highlight">New deployment</span></li>
+                    <li>Klicka på kugghjulet och välj <span class="highlight">Web app</span></li>
+                    <li>Fyll i följande inställningar:
+                        <ul>
+                            <li><strong>Description:</strong> "Quiz Results Receiver" (valfritt)</li>
+                            <li><strong>Execute as:</strong> "Me (din e-post)"</li>
+                            <li><strong>Who has access:</strong> "Anyone"</li>
+                        </ul>
+                    </li>
+                    <li>Klicka på <span class="highlight">Deploy</span></li>
+                    <li>Du kan behöva godkänna åtkomst - följ instruktionerna</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Kopiera Web App URL</strong>
+                <ul>
+                    <li>Efter deployment visas en <span class="highlight">Web App URL</span></li>
+                    <li>Den ser ut ungefär så här: <code>https://script.google.com/macros/s/AKfy.../exec</code></li>
+                    <li>Kopiera hela URL:en</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">6</span>
+                <strong>Konfigurera Quiz-applikationen</strong>
+                <ul>
+                    <li>Öppna <code>1x2_fragor.html</code> i en webbläsare</li>
+                    <li>På inloggningsskärmen, klistra in Web App URL:en i fältet "Google Sheets Web App URL"</li>
+                    <li>Nu kommer alla elevresultat automatiskt sparas i ditt Google Sheets!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📈 Vad sparas i Google Sheets?</h2>
+            <div class="info-box">
+                <p>Scriptet skapar automatiskt två blad i ditt kalkylblad:</p>
+                <br>
+                <strong>1. Resultatsammanfattning</strong>
+                <ul>
+                    <li>Tidpunkt för testet</li>
+                    <li>Elevens namn</li>
+                    <li>Antal frågor, rätt/fel svar</li>
+                    <li>Procent och betyg (A-F)</li>
+                    <li>Tid som eleven spenderade</li>
+                </ul>
+                <br>
+                <strong>2. Detaljerade Svar</strong>
+                <ul>
+                    <li>Varje fråga eleven fick</li>
+                    <li>Elevens svar</li>
+                    <li>Det rätta svaret</li>
+                    <li>Om svaret var rätt eller fel</li>
+                </ul>
+            </div>
+
+            <div class="stats-preview">
+                <div class="stat-card">
+                    <h3>Elev</h3>
+                    <div class="value">Anna S</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Resultat</h3>
+                    <div class="value">85%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Betyg</h3>
+                    <div class="value">B</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tid</h3>
+                    <div class="value">3:45</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Använd Applikationen</h2>
+            <div class="success-box">
+                <strong>✓ När allt är uppsatt:</strong>
+                <ol>
+                    <li>Dela <code>1x2_fragor.html</code> med dina elever</li>
+                    <li>Eleven loggar in med sitt namn</li>
+                    <li>Läraren (du) klistrar in Google Sheets URL:en en gång</li>
+                    <li>Eleven laddar upp CSV-filen med frågor</li>
+                    <li>Eleven gör testet</li>
+                    <li>Resultaten sparas automatiskt i Google Sheets!</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Tips & Tricks</h2>
+            <div class="info-box">
+                <ul>
+                    <li><strong>Spara URL:en:</strong> Du behöver bara sätta upp Google Sheets en gång. Spara Web App URL:en så du kan använda den igen.</li>
+                    <li><strong>Olika quiz:</strong> Du kan använda samma Google Sheets för flera olika quiz - bara använd olika CSV-filer.</li>
+                    <li><strong>Analys:</strong> I Google Sheets kan du skapa diagram och pivottabeller för att analysera elevernas prestationer.</li>
+                    <li><strong>Dela med kollegor:</strong> Dela Google Sheets med andra lärare för att samarbeta.</li>
+                    <li><strong>Exportera:</strong> Du kan exportera data från Google Sheets till Excel om du vill.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Snabblänkar</h2>
+            <a href="1x2_fragor.html" class="btn">🎓 Öppna Quiz-appen</a>
+            <a href="https://sheets.google.com" target="_blank" class="btn btn-success">📊 Öppna Google Sheets</a>
+        </div>
+
+        <div class="section">
+            <h2>❓ Felsökning</h2>
+            <div class="info-box">
+                <strong>Resultat sparas inte?</strong>
+                <ul>
+                    <li>Kontrollera att Web App URL:en är korrekt inklistrad</li>
+                    <li>Kontrollera att "Who has access" är satt till "Anyone" i deployment-inställningarna</li>
+                    <li>Kör test-funktionen i Apps Script för att se om den fungerar</li>
+                </ul>
+                <br>
+                <strong>Får felmeddelande vid deployment?</strong>
+                <ul>
+                    <li>Kontrollera att du har godkänt alla behörigheter</li>
+                    <li>Försök deploya igen</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

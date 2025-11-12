@@ -334,13 +334,128 @@
             display: block;
             margin-bottom: 10px;
         }
+
+        .login-section {
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            background: #f8f9ff;
+        }
+
+        .login-section h2 {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .student-info {
+            background: #e8f4f8;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .config-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .config-section h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .config-section small {
+            color: #856404;
+            font-size: 0.85em;
+        }
+
+        .upload-section {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📚 Historia - Övningsfrågor</h1>
 
+        <div class="login-section" id="loginSection">
+            <h2>Välkommen!</h2>
+            <div class="login-form">
+                <div class="config-section">
+                    <h3>Lärarinställningar</h3>
+                    <div class="form-group">
+                        <label for="sheetsUrl">Google Sheets Web App URL (läraren fyller i detta):</label>
+                        <input type="url" id="sheetsUrl" placeholder="https://script.google.com/macros/s/..." />
+                        <small>Lämna tomt om du inte har konfigurerat Google Sheets</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="studentName">Ditt namn:</label>
+                    <input type="text" id="studentName" placeholder="Skriv ditt för- och efternamn" required />
+                </div>
+                <button class="login-btn" onclick="login()">Starta Quiz</button>
+            </div>
+        </div>
+
         <div class="upload-section" id="uploadSection">
+            <div class="student-info" id="studentInfoUpload"></div>
             <h2>Ladda upp din frågefil</h2>
             <div class="instructions">
                 <strong>CSV-format:</strong>
@@ -355,6 +470,7 @@
         </div>
 
         <div class="quiz-section" id="quizSection">
+            <div class="student-info" id="studentInfoQuiz"></div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
@@ -411,6 +527,31 @@
         let userAnswers = [];
         let startTime = null;
         let endTime = null;
+        let studentName = '';
+        let googleSheetsUrl = '';
+
+        function login() {
+            const nameInput = document.getElementById('studentName');
+            const urlInput = document.getElementById('sheetsUrl');
+
+            studentName = nameInput.value.trim();
+
+            if (!studentName) {
+                alert('Vänligen ange ditt namn!');
+                return;
+            }
+
+            googleSheetsUrl = urlInput.value.trim();
+
+            // Show upload section
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'block';
+
+            // Display student name
+            const studentInfo = `Inloggad som: ${studentName}`;
+            document.getElementById('studentInfoUpload').textContent = studentInfo;
+            document.getElementById('studentInfoQuiz').textContent = studentInfo;
+        }
 
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -611,6 +752,49 @@
                 resultItem.appendChild(answerInfo);
                 detailedContainer.appendChild(resultItem);
             });
+
+            // Send results to Google Sheets
+            sendResultsToGoogleSheets(percentage, grade, timeString);
+        }
+
+        async function sendResultsToGoogleSheets(percentage, grade, timeString) {
+            if (!googleSheetsUrl) {
+                console.log('Google Sheets URL inte konfigurerad, hoppar över sparande');
+                return;
+            }
+
+            try {
+                const data = {
+                    timestamp: new Date().toLocaleString('sv-SE'),
+                    studentName: studentName,
+                    totalQuestions: questions.length,
+                    correctAnswers: score,
+                    incorrectAnswers: questions.length - score,
+                    percentage: percentage,
+                    grade: grade,
+                    timeSpent: timeString,
+                    details: userAnswers.map((answer, index) => ({
+                        questionNumber: index + 1,
+                        question: answer.questionText,
+                        studentAnswer: answer.options[answer.userAnswer],
+                        correctAnswer: answer.options[answer.correctAnswer],
+                        isCorrect: answer.isCorrect
+                    }))
+                };
+
+                const response = await fetch(googleSheetsUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                console.log('Resultat skickade till Google Sheets');
+            } catch (error) {
+                console.error('Fel vid skickande till Google Sheets:', error);
+            }
         }
 
         function downloadResults() {

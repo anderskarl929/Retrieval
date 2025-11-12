@@ -1,10 +1,11 @@
 # Retrieval Övningsapplikation
 
-En interaktiv webbapplikation för elever att öva retrieval med 1X2-frågor (flervalsfrågorfrågor med 3 alternativ).
+En interaktiv webbapplikation för elever att öva retrieval med 1X2-frågor (flervalsfrågorfrågor med 3 alternativ). Resultat sparas automatiskt i Google Sheets för lärarens översikt.
 
 ## Funktioner
 
 ### För Elever
+- ✅ Enkel inloggning med namn
 - ✅ Interaktiva flervalsfrågorfrågor med 3 alternativ
 - ✅ Omedelbar feedback på svaren
 - ✅ Visuell progressbar
@@ -13,32 +14,119 @@ En interaktiv webbapplikation för elever att öva retrieval med 1X2-frågor (fl
 - ✅ Tidsstatistik
 
 ### För Lärare
+- ✅ Elevinloggning - spåra vem som gör vilket test
+- ✅ Automatisk sparning av resultat till Google Sheets
+- ✅ Se alla elevresultat på ett ställe
+- ✅ Detaljerad fråga-för-fråga genomgång för varje elev
+- ✅ Färgkodade resultat baserat på betyg
+- ✅ Exportera data för vidare analys
 - ✅ Ladda upp egna frågefiler (CSV-format)
-- ✅ Få omfattande resultatsammanfattning
-- ✅ Ladda ner resultat som CSV-fil
-- ✅ Se detaljerad fråga-för-fråga genomgång
 
-## Hur man använder
+## Snabbstart
 
-### Steg 1: Öppna applikationen
-Öppna filen `1x2_fragor.html` i en webbläsare.
+### För Lärare - Första gången
 
-### Steg 2: Ladda upp en CSV-fil
-Klicka på "Välj CSV-fil" och välj din frågefil. En exempelfil finns i `exempel_fragor.csv`.
+1. **Öppna lärar-dashboarden**
+   - Öppna `larar-dashboard.html` i en webbläsare
+   - Följ steg-för-steg instruktionerna för att sätta upp Google Sheets
 
-### Steg 3: Svara på frågorna
-Eleverna klickar på det alternativ de tror är rätt. Direkt feedback ges efter varje svar.
+2. **Konfigurera Google Sheets** (engångsinställning)
+   - Se detaljerade instruktioner i `larar-dashboard.html`
+   - Eller följ "Google Sheets Setup" nedan
 
-### Steg 4: Se resultaten
-Efter sista frågan visas en omfattande resultatsammanfattning med:
-- Total poäng och procent
-- Antal rätt och fel svar
-- Total tid
-- Betyg (A-F)
-- Detaljerad genomgång av alla frågor
+3. **Dela med elever**
+   - Dela filen `1x2_fragor.html` med dina elever
+   - Klistra in Google Sheets Web App URL i applikationen
 
-### Steg 5: Ladda ner resultat (valfritt)
-Klicka på "Ladda ner Resultat" för att spara resultaten som en CSV-fil.
+### För Elever
+
+1. **Öppna applikationen**
+   - Öppna `1x2_fragor.html` i en webbläsare
+
+2. **Logga in**
+   - Ange ditt för- och efternamn
+   - Klicka "Starta Quiz"
+
+3. **Ladda upp frågefil**
+   - Välj CSV-fil med frågor (läraren ger dig denna)
+   - Eller använd `exempel_fragor.csv` för att testa
+
+4. **Gör testet**
+   - Svara på frågorna
+   - Få direkt feedback
+
+5. **Se dina resultat**
+   - Resultat sparas automatiskt till läraren
+   - Du kan också ladda ner dina egna resultat
+
+## Google Sheets Setup (För Lärare)
+
+### Detaljerade Instruktioner
+
+**Steg 1: Skapa Google Sheets**
+1. Gå till [Google Sheets](https://sheets.google.com)
+2. Skapa ett nytt kalkylblad
+3. Döp det till t.ex. "Elevresultat Historia 2024"
+
+**Steg 2: Öppna Apps Script**
+1. Klicka på `Extensions` → `Apps Script`
+2. En ny flik öppnas
+
+**Steg 3: Klistra in Script**
+1. Ta bort all befintlig kod
+2. Öppna filen `google-apps-script.js`
+3. Kopiera hela innehållet och klistra in
+4. Klicka på "Spara" (💾)
+
+**Steg 4: Deploya Web App**
+1. Klicka på `Deploy` → `New deployment`
+2. Välj typ: `Web app`
+3. Sätt inställningar:
+   - **Execute as:** Me
+   - **Who has access:** Anyone
+4. Klicka `Deploy`
+5. Godkänn behörigheter om du tillfrågas
+
+**Steg 5: Kopiera URL**
+1. Kopiera "Web App URL" (ser ut som: `https://script.google.com/macros/s/.../exec`)
+2. Klistra in denna URL i quiz-applikationen under "Lärarinställningar"
+
+### Vad sparas i Google Sheets?
+
+Två blad skapas automatiskt:
+
+**1. Resultatsammanfattning**
+- Tidpunkt
+- Elevens namn
+- Antal frågor, rätt/fel svar
+- Procent och betyg
+- Tid som spenderats
+
+**2. Detaljerade Svar**
+- Varje fråga eleven fick
+- Elevens svar
+- Rätt svar
+- Om det var rätt eller fel
+
+## Hur man använder (Detaljerat)
+
+### Steg 1: Inloggning
+- Eleven anger sitt för- och efternamn
+- Läraren klistrar in Google Sheets Web App URL (behövs bara första gången)
+
+### Steg 2: Ladda upp CSV-fil
+- Klicka på "Välj CSV-fil"
+- Välj frågefil (se CSV-format nedan)
+
+### Steg 3: Svara på frågor
+- Klicka på rätt alternativ
+- Få omedelbar feedback
+- Klicka "Nästa fråga"
+
+### Steg 4: Se resultat
+- Omfattande sammanfattning visas
+- Resultat sparas automatiskt till Google Sheets
+- Ladda ner egna resultat (valfritt)
 
 ## CSV-format
 
