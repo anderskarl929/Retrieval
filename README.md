@@ -21,6 +21,31 @@ En interaktiv webbapplikation för elever att öva retrieval med 1X2-frågor (fl
 - ✅ Färgkodade resultat baserat på betyg
 - ✅ Exportera data för vidare analys
 - ✅ Ladda upp egna frågefiler (CSV-format)
+- ✅ **AI Frågegenerator - Generera frågor automatiskt från text!**
+
+## 🤖 AI Frågegenerator - NYT!
+
+**Spara tid med AI!** Generera automatiskt 1X2-frågor från vilken text som helst.
+
+### Snabbstart Frågegenerator
+
+1. **Öppna `fragegenerator.html` i webbläsaren**
+2. **Skaffa API-nyckel:**
+   - Gå till [Anthropic Console](https://console.anthropic.com/) eller [OpenAI Platform](https://platform.openai.com/)
+   - Skapa gratis konto (får $5 i gratis krediter)
+   - Skapa API-nyckel
+3. **Klistra in text** du vill skapa frågor från
+4. **Klicka "Generera Frågor"**
+5. **Ladda ner CSV** och använd direkt i quiz-appen!
+
+**Läs mer:** Se `FRAGEGENERATOR_README.md` för fullständig guide
+
+**Filer:**
+- `fragegenerator.html` - Web-baserad generator (enklast!)
+- `fragegenerator.py` - Python-version för avancerade användare
+- `exempel_text_historia.txt` - Exempeltext att testa med
+
+**Kostnad:** ~1 kr per 100 genererade frågor
 
 ## Snabbstart
 
